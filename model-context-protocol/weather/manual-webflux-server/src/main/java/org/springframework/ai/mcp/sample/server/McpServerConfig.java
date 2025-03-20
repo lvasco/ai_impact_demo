@@ -55,13 +55,12 @@ public class McpServerConfig {
 			.build();
 
 		// Create the server with both tool and resource capabilities
-		McpSyncServer server = McpServer.sync(transport)
+        return McpServer.sync(transport)
 			.serverInfo("MCP Demo Weather Server", "1.0.0")
 			.capabilities(capabilities)
 			.tools(McpToolUtils.toSyncToolRegistration(ToolCallbacks.from(weatherApiClient))) // Add @Tools
 			.build();
 		
-		return server; // @formatter:on
 	} // @formatter:on
 
 }
