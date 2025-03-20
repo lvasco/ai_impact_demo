@@ -28,10 +28,12 @@ public class SpringAiJavaFunctionCallbackApplication {
 						.functions("WeatherInfo")
 						.call().chatResponse();
 
-				System.out.println("Response: " + response);
+                Logger logger = Logger.getLogger(SpringAiJavaFunctionCallbackApplication.class.getName());
+                logger.info("Response: " + response);
 			}
 			catch (Exception e) {
-				System.out.println("Error during weather check: " + e.getMessage());
+                Logger logger = Logger.getLogger(SpringAiJavaFunctionCallbackApplication.class.getName());
+                logger.severe("Error during weather check: " + e.getMessage());
 			}
 		};
 	}
