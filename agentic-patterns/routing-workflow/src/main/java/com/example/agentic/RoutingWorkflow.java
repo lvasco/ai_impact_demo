@@ -15,6 +15,7 @@
 */
 package com.example.agentic;
 
+import java.util.logging.Logger;
 import java.util.Map;
 
 import org.springframework.ai.chat.client.ChatClient;
@@ -77,6 +78,7 @@ import org.springframework.util.Assert;
  */
 public class RoutingWorkflow {
 
+    private static final Logger LOGGER = Logger.getLogger(RoutingWorkflow.class.getName());
     private final ChatClient chatClient;
 
     public RoutingWorkflow(ChatClient chatClient) {
@@ -125,7 +127,7 @@ public class RoutingWorkflow {
         }
 
         // Process the input with the selected prompt
-        return chatClient.prompt(selectedPrompt + "\nInput: " + input).call().content();
+        return chatClient.prompt(selectedPrompt + System.lineSeparator() + \"Input: \" + input).call().content();
     }
 
     /**
@@ -149,7 +151,7 @@ public class RoutingWorkflow {
      */
     @SuppressWarnings("null")
     private String determineRoute(String input, Iterable<String> availableRoutes) {
-        System.out.println("\nAvailable routes: " + availableRoutes);
+        LOGGER.info(\"Available routes: \" + availableRoutes);
 
         String selectorPrompt = String.format("""
                 Analyze the input and select the most appropriate support team from these options: %s
@@ -161,12 +163,12 @@ public class RoutingWorkflow {
                     "selection": "The chosen team name"
                 \\}
 
-                Input: %s""", availableRoutes, input);
+        String selectorPrompt = String.format(\"\"\"Analyze the input and select the most appropriate support team from these options: %s%nFirst explain your reasoning, then provide your selection in this JSON format%n%n{%n    \\\"reasoning\\\": \\\"Brief explanation of why this ticket should be routed to a specific team.%n                Consider key terms, user intent, and urgency level.\\\",%n    \\\"selection\\\": \\\"The chosen team name\\\"%n}%n%nInput: %s\"\"\", availableRoutes, input);
 
         RoutingResponse routingResponse = chatClient.prompt(selectorPrompt).call().entity(RoutingResponse.class);
 
-        System.out.println(String.format("Routing Analysis:%s\nSelected route: %s",
-                routingResponse.reasoning(), routingResponse.selection()));
+        LOGGER.info(String.format(\"Routing Analysis:%s%nSelected route: %s\", routingResponse.reasoning(), routingResponse.selection()));
+        LOGGER.info(String.format(\"Routing Analysis:%s%nSelected route: %s\", routingResponse.reason
 
         return routingResponse.selection();
     }
