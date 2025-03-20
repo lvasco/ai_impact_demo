@@ -101,7 +101,7 @@ public class WeatherService {
 
 		var forecast = restClient.get().uri(points.properties().forecast()).retrieve().body(Forecast.class);
 
-		String forecastText = forecast.properties().periods().stream().map(p -> {
+        return forecast.properties().periods().stream().map(p -> {
 			return String.format("""
 					%s:
 					Temperature: %s %s
