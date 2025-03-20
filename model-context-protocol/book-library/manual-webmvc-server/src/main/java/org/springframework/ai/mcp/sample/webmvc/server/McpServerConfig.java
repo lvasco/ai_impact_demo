@@ -72,7 +72,7 @@ public class McpServerConfig implements WebMvcConfigurer {
 			.build();
 
 		// Create the server with both tool and resource capabilities
-		var server = McpServer.sync(transport)
+        return McpServer.sync(transport)
 			.serverInfo("MCP Demo WebMVC Server", "1.0.0")
 			.capabilities(capabilities)
 			.resources(systemInfoResourceRegistration())
@@ -116,7 +116,7 @@ public class McpServerConfig implements WebMvcConfigurer {
 			"application/json", null
 		);
 
-		var resourceRegistration = new SyncResourceRegistration(systemInfoResource, (request) -> {
+        return new SyncResourceRegistration(systemInfoResource, (request) -> {
 			try {
 				var systemInfo = Map.of(
 					"javaVersion", System.getProperty("java.version"),
