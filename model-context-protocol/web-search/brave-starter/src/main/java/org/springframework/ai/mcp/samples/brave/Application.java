@@ -15,6 +15,8 @@
  */
 package org.springframework.ai.mcp.samples.brave;
 
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import org.springframework.ai.chat.client.ChatClient;
 import org.springframework.ai.tool.ToolCallbackProvider;
 import org.springframework.boot.CommandLineRunner;
@@ -25,6 +27,7 @@ import org.springframework.context.annotation.Bean;
 
 @SpringBootApplication
 public class Application {
+    private static final Logger LOGGER = Logger.getLogger(Application.class.getName());
 
 	public static void main(String[] args) {
 		SpringApplication.run(Application.class, args);
@@ -42,8 +45,8 @@ public class Application {
 
 			String question = "Does Spring AI support the Model Context Protocol? Please provide some references.";
 
-			System.out.println("QUESTION: " + question);
-			System.out.println("ASSISTANT: " + chatClient.prompt(question).call().content());
+            LOGGER.log(Level.INFO, "QUESTION: {0}", question);
+            LOGGER.log(Level.INFO, "ASSISTANT: {0}", chatClient.prompt(question).call().content());
 
 			context.close();
 		};
