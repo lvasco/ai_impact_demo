@@ -3,6 +3,7 @@ package org.springframework.ai.mcp.samples.sqlite;
 import java.nio.file.Paths;
 import java.time.Duration;
 import java.util.List;
+import java.util.logging.Logger;
 import java.util.Scanner;
 
 import org.springframework.ai.chat.client.ChatClient;
@@ -19,6 +20,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.context.annotation.Bean;
 
+private static final Logger LOGGER = Logger.getLogger(Application.class.getName());
 @SpringBootApplication
 public class Application {
 
@@ -38,20 +40,20 @@ public class Application {
 					.build();
 
 			var scanner = new Scanner(System.in);
-			System.out.println("\nStarting interactive chat session. Type 'exit' to quit.");
+			LOGGER.info("\nStarting interactive chat session. Type 'exit' to quit.");
 
 			try {
 				while (true) {
-					System.out.print("\nUSER: ");
+					LOGGER.info("\nUSER: ");
 					String input = scanner.nextLine();
 
 					if (input.equalsIgnoreCase("exit")) {
-						System.out.println("Ending chat session.");
+						LOGGER.info("Ending chat session.");
 						break;
 					}
 
-					System.out.print("ASSISTANT: ");
-					System.out.println(chatClient.prompt(input).call().content());
+					LOGGER.info("ASSISTANT: ");
+					LOGGER.info(chatClient.prompt(input).call().content());
 				}
 			} finally {
 				scanner.close();
@@ -64,7 +66,7 @@ public class Application {
 	@Bean
 	public List<McpFunctionCallback> functionCallbacks(McpSyncClient mcpClient) {
 
-		var callbacks = mcpClient.listTools(null)
+		return mcpClient.listTools(null).tools().stream().map(tool -> new McpFunctionCallback(mcpClient, tool)).toList();
 				.tools()
 				.stream()
 				.map(tool -> new McpFunctionCallback(mcpClient, tool))
@@ -85,7 +87,7 @@ public class Application {
 
 		var init = mcpClient.initialize();
 
-		System.out.println("MCP Initialized: " + init);
+		LOGGER.info("MCP Initialized: " + init);
 
 		return mcpClient;
 
