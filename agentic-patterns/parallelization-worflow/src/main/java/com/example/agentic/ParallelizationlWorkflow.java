@@ -109,7 +109,7 @@ public class ParallelizationlWorkflow {
 						try {
 							return chatClient.prompt(prompt + "\nInput: " + input).call().content();
 						} catch (Exception e) {
-							throw new RuntimeException("Failed to process input: " + input, e);
+                            throw new ProcessingException("Failed to process input: " + input, e);
 						}
 					}, executor))
 					.collect(Collectors.toList());
@@ -121,7 +121,7 @@ public class ParallelizationlWorkflow {
 
 			return futures.stream()
 					.map(CompletableFuture::join)
-					.collect(Collectors.toList());
+                    .toList();
 
 		} finally {
 			executor.shutdown();
