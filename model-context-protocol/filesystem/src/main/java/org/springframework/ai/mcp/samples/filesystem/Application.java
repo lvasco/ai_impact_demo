@@ -1,5 +1,7 @@
 package org.springframework.ai.mcp.samples.filesystem;
 
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import java.nio.file.Paths;
 import java.time.Duration;
 import java.util.List;
@@ -19,6 +21,7 @@ import org.springframework.context.annotation.Bean;
 @SpringBootApplication
 public class Application {
 
+private static final Logger logger = Logger.getLogger(Application.class.getName());
 	public static void main(String[] args) {
 		SpringApplication.run(Application.class, args);
 	}
@@ -32,17 +35,12 @@ public class Application {
 					.defaultFunctions(functionCallbacks.toArray(new McpFunctionCallback[0]))
 					.build();
 
-			System.out.println("Running predefined questions with AI model responses:\n");
-
+logger.log(Level.INFO, \"Running predefined questions with AI model responses:\\n\");
 			// Question 1
 			String question1 = "Can you explain the content of the spring-ai-mcp-overview.txt file?";
-			System.out.println("QUESTION: " + question1);
-			System.out.println("ASSISTANT: " + chatClient.prompt(question1).call().content());
 
 			// Question 2
 			String question2 = "Pleses summarize the content of the spring-ai-mcp-overview.txt file and store it a new summary.md as Markdown format?";
-			System.out.println("\nQUESTION: " + question2);
-			System.out.println("ASSISTANT: " +
 					chatClient.prompt(question2).call().content());
 
 			context.close();
@@ -53,12 +51,10 @@ public class Application {
 	@Bean
 	public List<McpFunctionCallback> functionCallbacks(McpSyncClient mcpClient) {
 
-		var callbacks = mcpClient.listTools(null)
 				.tools()
 				.stream()
 				.map(tool -> new McpFunctionCallback(mcpClient, tool))
 				.toList();
-		return callbacks;
 	}
 
 	@Bean(destroyMethod = "close")
@@ -75,7 +71,6 @@ public class Application {
 
 		var init = mcpClient.initialize();
 
-		System.out.println("MCP Initialized: " + init);
 
 		return mcpClient;
 
