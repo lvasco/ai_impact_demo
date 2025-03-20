@@ -24,7 +24,7 @@ import org.springframework.web.reactive.function.client.WebClient;
  */
 public class ClientWebFluxSse {
 
-	public static void main(String[] args) {
+	public static void main() {
 		var transport = new WebFluxSseClientTransport(WebClient.builder().baseUrl("http://localhost:8080"));
 
 		new SampleClient(transport).run();
