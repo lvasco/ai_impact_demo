@@ -4,11 +4,11 @@ public class WeatherResponse {
 
 	private final double temp;
 
-	private final double feels_like;
+	private final double feelsLike;
 
-	private final double temp_min;
+	private final double tempMin;
 
-	private final double temp_max;
+	private final double tempMax;
 
 	private final int pressure;
 
@@ -16,12 +16,12 @@ public class WeatherResponse {
 
 	private final SpringAiJavaFunctionCallbackApplication.Unit unit;
 
-	public WeatherResponse(double temp, double feels_like, double temp_min,
-			double temp_max, int pressure, int humidity, SpringAiJavaFunctionCallbackApplication.Unit unit) {
+	public WeatherResponse(double temp, double feelsLike, double tempMin,
+			double tempMax, int pressure, int humidity, SpringAiJavaFunctionCallbackApplication.Unit unit) {
 		this.temp = temp;
-		this.feels_like = feels_like;
-		this.temp_min = temp_min;
-		this.temp_max = temp_max;
+		this.feelsLike = feelsLike;
+		this.tempMin = tempMin;
+		this.tempMax = tempMax;
 		this.pressure = pressure;
 		this.humidity = humidity;
 		this.unit = unit;
@@ -31,15 +31,15 @@ public class WeatherResponse {
 		return temp;
 	}
 
-	public double getFeels_like() {
+	public double getFeelsLike() {
 		return feels_like;
 	}
 
-	public double getTemp_min() {
+	public double getTempMin() {
 		return temp_min;
 	}
 
-	public double getTemp_max() {
+	public double getTempMax() {
 		return temp_max;
 	}
 
