@@ -15,6 +15,7 @@
 */
 package org.springframework.ai.mcp.sample.webmvc.server;
 
+import java.util.logging.Logger;
 import java.util.List;
 import java.util.Map;
 
@@ -27,6 +28,7 @@ import org.springframework.web.client.RestClient;
 public class OpenLibrary {
 
 	private RestClient restClient;
+private static final Logger LOGGER = Logger.getLogger(OpenLibrary.class.getName());
 
 	public OpenLibrary(RestClient.Builder restClientBuilder) {
 		this.restClient = restClientBuilder.baseUrl("https://openlibrary.org").build();
@@ -66,9 +68,9 @@ public class OpenLibrary {
 	public static void main(String[] args) {
 		OpenLibrary openLibrary = new OpenLibrary(RestClient.builder());
 		List<Book> books = openLibrary.getBooks("Spring Framework");
-		System.out.println(books);
+		LOGGER.info(books.toString());
 		List<String> booksByAuthor = openLibrary.getBookTitlesByAuthor("Craig Walls");
-		System.out.println(booksByAuthor);
+		LOGGER.info(booksByAuthor.toString());
 	}
 
 }
