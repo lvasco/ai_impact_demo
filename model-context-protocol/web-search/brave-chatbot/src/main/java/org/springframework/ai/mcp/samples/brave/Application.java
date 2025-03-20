@@ -1,6 +1,8 @@
 package org.springframework.ai.mcp.samples.brave;
 
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import java.util.Scanner;
 
 import org.springframework.ai.chat.client.ChatClient;
@@ -15,6 +17,7 @@ import org.springframework.context.annotation.Bean;
 
 @SpringBootApplication
 public class Application {
+    private static final Logger LOGGER = Logger.getLogger(Application.class.getName());
 
 	public static void main(String[] args) {
 		SpringApplication.run(Application.class, args);
@@ -32,11 +35,11 @@ public class Application {
 					.build();
 
 			// Start the chat loop
-			System.out.println("\nI am your AI assistant.\n");
+            LOGGER.info("\nI am your AI assistant.\n");
 			try (Scanner scanner = new Scanner(System.in)) {
 				while (true) {
-					System.out.print("\nUSER: ");
-					System.out.println("\nASSISTANT: " +
+                    LOGGER.info("\nUSER: ");
+                    LOGGER.info("\nASSISTANT: " + chatClient.prompt(scanner.nextLine()) // Get the user input
 							chatClient.prompt(scanner.nextLine()) // Get the user input
 									.call()
 									.content());
