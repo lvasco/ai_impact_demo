@@ -100,12 +100,17 @@ public class WeatherService {
 
 		var forecast = restClient.get().uri(points.properties().forecast()).retrieve().body(Forecast.class);
 
-		String forecastText = forecast.properties().periods().stream().map(p -> {
-			return String.format("""
+		return forecast.properties().periods().stream().map(p -> {
+			String template = """
+%s
 					%s:
+Temperature: %s %s
 					Temperature: %s %s
+Wind: %s %s
 					Wind: %s %s
+Forecast: %s
 					Forecast: %s
+""";
 					""", p.name(), p.temperature(), p.temperatureUnit(), p.windSpeed(), p.windDirection(),
 					p.detailedForecast());
 		}).collect(Collectors.joining());
@@ -125,12 +130,18 @@ public class WeatherService {
 
 		return alert.features()
 			.stream()
-			.map(f -> String.format("""
+			String alertTemplate = """
+Event: %s
 					Event: %s
+Area: %s
 					Area: %s
+Severity: %s
 					Severity: %s
+Description: %s
 					Description: %s
+Instructions: %s
 					Instructions: %s
+""";
 					""", f.properties().event(), f.properties.areaDesc(), f.properties.severity(),
 					f.properties.description(), f.properties.instruction()))
 			.collect(Collectors.joining("\n"));
@@ -138,8 +149,10 @@ public class WeatherService {
 
 	public static void main(String[] args) {
 		WeatherService client = new WeatherService();
-		System.out.println(client.getWeatherForecastByLocation(47.6062, -122.3321));
+		Logger logger = Logger.getLogger(WeatherService.class.getName());
+logger.info(client.getWeatherForecastByLocation(47.6062, -122.3321));
 		System.out.println(client.getAlerts("NY"));
+logger.info(client.getAlerts("NY"));
 	}
 
 }
