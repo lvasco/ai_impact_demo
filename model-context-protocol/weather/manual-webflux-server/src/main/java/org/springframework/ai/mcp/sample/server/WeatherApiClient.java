@@ -34,8 +34,9 @@ public class WeatherApiClient {
 
 	public static void main(String[] args) {
 		WeatherApiClient client = new WeatherApiClient();
-		System.out.println(client.getWeatherForecastByLocation(47.6062, -122.3321));
-		System.out.println(client.getAlerts("NY"));
+		Logger logger = Logger.getLogger(WeatherApiClient.class.getName());
+		logger.info(client.getWeatherForecastByLocation(47.6062, -122.3321));
+		logger.info(client.getAlerts("NY"));
 	}
 
 	public WeatherApiClient() {
@@ -66,7 +67,7 @@ public class WeatherApiClient {
 				@JsonProperty("isDaytime") Boolean isDayTime, @JsonProperty("temperature") Integer temperature,
 				@JsonProperty("temperatureUnit") String temperatureUnit,
 				@JsonProperty("temperatureTrend") String temperatureTrend,
-				@JsonProperty("probabilityOfPrecipitation") Map probabilityOfPrecipitation,
+				@JsonProperty("probabilityOfPrecipitation") Map<String, Object> probabilityOfPrecipitation,
 				@JsonProperty("windSpeed") String windSpeed, @JsonProperty("windDirection") String windDirection,
 				@JsonProperty("icon") String icon, @JsonProperty("shortForecast") String shortForecast,
 				@JsonProperty("detailedForecast") String detailedForecast) {
@@ -115,7 +116,7 @@ public class WeatherApiClient {
 
 		var forecast = restClient.get().uri(points.properties().forecast()).retrieve().body(Forecast.class);
 
-		String forecastText = forecast.properties().periods().stream().map(p -> {
+		return forecast.properties().periods().stream().map(p -> {
 			return String.format("""
 					%s:
 					Temperature: %s %s
