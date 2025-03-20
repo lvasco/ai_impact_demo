@@ -19,6 +19,8 @@ import org.springframework.ai.chat.client.ChatClient;
 import org.springframework.ai.chat.client.advisor.MessageChatMemoryAdvisor;
 import org.springframework.ai.chat.memory.InMemoryChatMemory;
 import org.springframework.ai.chat.model.ChatModel;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -52,15 +54,16 @@ public class ReflectionAgent {
     public String run(String userQuestion, int maxIterations) {
 
         String generation = generateChatClient.prompt(userQuestion).call().content();
-        System.out.println("##generation\n\n" + generation);
+        logger.log(Level.INFO, "##generation\n\n" + generation);
+        Logger logger = Logger.getLogger(ReflectionAgent.class.getName());
         String critique;
         for (int i = 0; i < maxIterations; i++) {
 
             critique = critiqueChatClient.prompt(generation).call().content();
 
-            System.out.println("##Critique\n\n" + critique);
+            logger.log(Level.INFO, "##Critique\n\n" + critique);
             if (critique.contains("<OK>")) {
-                System.out.println("\n\nStop sequence found\n\n");
+                logger.log(Level.INFO, "\n\nStop sequence found\n\n");
                 break;
             }
             generation = generateChatClient.prompt(critique).call().content();
