@@ -10,7 +10,7 @@ import com.fasterxml.jackson.annotation.JsonPropertyDescription;
 public class WeatherRequest {
 
 	public WeatherRequest() {
-	}
+        // This constructor is intentionally left empty. It can be used for deserialization or other purposes.
 
 	@JsonProperty(required = true, value = "location")
 	@JsonPropertyDescription("The city and state e.g. San Francisco, CA")
