@@ -15,6 +15,7 @@
 */
 package com.example.agentic;
 
+import java.util.logging.Logger;
 import java.util.List;
 
 import org.springframework.ai.chat.client.ChatClient;
@@ -26,6 +27,7 @@ import org.springframework.context.annotation.Bean;
 @SpringBootApplication
 public class Application {
 
+    private static final Logger LOGGER = Logger.getLogger(Application.class.getName());
 	public static void main(String[] args) {
 		SpringApplication.run(Application.class, args);
 	}
@@ -74,7 +76,7 @@ public class Application {
 											"""),
 							4);
 
-			System.out.println(parallelResponse);
+            LOGGER.info(parallelResponse.toString());
 
 		};
 	}
