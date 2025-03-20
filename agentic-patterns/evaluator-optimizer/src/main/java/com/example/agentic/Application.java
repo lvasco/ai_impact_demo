@@ -19,6 +19,8 @@ package com.example.agentic;
 import com.example.agentic.EvaluatorOptimizer.RefinedResponse;
 
 import org.springframework.ai.chat.client.ChatClient;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -35,6 +37,7 @@ public class Application {
 		SpringApplication.run(Application.class, args);
 	}
 
+    private static final Logger LOGGER = Logger.getLogger(Application.class.getName());
 	@Bean
 	public CommandLineRunner commandLineRunner(ChatClient.Builder chatClientBuilder) {
 		var chatClient = chatClientBuilder.build();
@@ -50,7 +53,7 @@ public class Application {
 					</user input>
 					""");
 
-			System.out.println("FINAL OUTPUT:\n : " + refinedResponse);
+            LOGGER.log(Level.INFO, "FINAL OUTPUT:\n : {0}", refinedResponse);
 		};
 	}
 }
