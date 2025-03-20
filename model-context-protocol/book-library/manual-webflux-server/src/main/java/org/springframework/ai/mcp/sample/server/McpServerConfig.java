@@ -69,7 +69,7 @@ public class McpServerConfig {
 			.build();
 
 		// Create the server with both tool and resource capabilities
-		McpSyncServer server = McpServer.sync(transport)
+        return McpServer.sync(transport)
 			.serverInfo("MCP Demo WebFlux Server", "1.0.0")
 			.capabilities(capabilities)
 			.resources(systemInfoResourceRegistration()) // Resources
@@ -113,7 +113,7 @@ public class McpServerConfig {
 			"application/json", null
 		);
 
-		var resourceRegistration = new McpServerFeatures.SyncResourceRegistration(systemInfoResource, (request) -> {
+        return new McpServerFeatures.SyncResourceRegistration(systemInfoResource, (request) -> {
 			try {
 				var systemInfo = Map.of(
 					"javaVersion", System.getProperty("java.version"),
