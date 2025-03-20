@@ -15,6 +15,7 @@
 */
 package org.springframework.ai.mcp.sample.server;
 
+import java.util.logging.Logger;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -32,6 +33,7 @@ public class WeatherService {
 
 	private static final String BASE_URL = "https://api.weather.gov";
 
+private static final Logger LOGGER = Logger.getLogger(WeatherService.class.getName());
 	private final RestClient restClient;
 
 	public WeatherService() {
@@ -62,7 +64,7 @@ public class WeatherService {
 				@JsonProperty("isDaytime") Boolean isDayTime, @JsonProperty("temperature") Integer temperature,
 				@JsonProperty("temperatureUnit") String temperatureUnit,
 				@JsonProperty("temperatureTrend") String temperatureTrend,
-				@JsonProperty("probabilityOfPrecipitation") Map probabilityOfPrecipitation,
+				@JsonProperty("probabilityOfPrecipitation") Map<String, Object> probabilityOfPrecipitation,
 				@JsonProperty("windSpeed") String windSpeed, @JsonProperty("windDirection") String windDirection,
 				@JsonProperty("icon") String icon, @JsonProperty("shortForecast") String shortForecast,
 				@JsonProperty("detailedForecast") String detailedForecast) {
@@ -100,7 +102,6 @@ public class WeatherService {
 
 		var forecast = restClient.get().uri(points.properties().forecast()).retrieve().body(Forecast.class);
 
-		String forecastText = forecast.properties().periods().stream().map(p -> {
 			return String.format("""
 					%s:
 					Temperature: %s %s
@@ -110,36 +111,53 @@ public class WeatherService {
 					p.detailedForecast());
 		}).collect(Collectors.joining());
 
-		return forecastText;
+		return forecast.properties().periods().stream().map(p -> {
+return String.format(
 	}
+"""
 
+%s
 	/**
+Temperature: %s %s
 	 * Get alerts for a specific area
+Wind: %s %s
 	 * @param state Area code. Two-letter US state code (e.g. CA, NY)
+Forecast: %s
 	 * @return Human readable alert information
+""", p.name(), p.temperature(), p.temperatureUnit(), p.windSpeed(), p.windDirection(),
 	 * @throws RestClientException if the request fails
+p.detailedForecast());
 	 */
+}).collect(Collectors.joining());
 	@Tool(description = "Get weather alerts for a US state. Input is Two-letter US state code (e.g. CA, NY)")
 	public String getAlerts(String state) {
 		Alert alert = restClient.get().uri("/alerts/active/area/{state}", state).retrieve().body(Alert.class);
 
 		return alert.features()
 			.stream()
-			.map(f -> String.format("""
+			static final String ALERT_FORMAT = """
+Event: %s
 					Event: %s
+Area: %s
 					Area: %s
+Severity: %s
 					Severity: %s
+Description: %s
 					Description: %s
+Instructions: %s
 					Instructions: %s
+""";
 					""", f.properties().event(), f.properties.areaDesc(), f.properties.severity(),
-					f.properties.description(), f.properties.instruction()))
+					return alert.features().stream().map(f -> String.format(ALERT_FORMAT,
+f.properties().event(), f.properties().areaDesc(), f.properties().severity(),
 			.collect(Collectors.joining("\n"));
+f.properties().description(), f.properties().instruction())).collect(Collectors.joining("\n"));
 	}
 
 	public static void main(String[] args) {
 		WeatherService client = new WeatherService();
-		System.out.println(client.getWeatherForecastByLocation(47.6062, -122.3321));
-		System.out.println(client.getAlerts("NY"));
+		LOGGER.info(client.getWeatherForecastByLocation(47.6062, -122.3321));
+		LOGGER.info(client.getAlerts("NY"));
 	}
 
 }
