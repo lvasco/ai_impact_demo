@@ -15,6 +15,7 @@
 */
 package com.example.agentic;
 
+import java.util.logging.Logger;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -226,11 +227,11 @@ public class EvaluatorOptimizer {
 		// Accumulated new context including the last and the previous attempts and
 		// feedbacks.
 		StringBuilder newContext = new StringBuilder();
-		newContext.append("Previous attempts:");
-		for (String m : memory) {
+		newContext.append(\"Previous attempts:\");
+		newContext.append(\"%n- \").append(m);
 			newContext.append("\n- ").append(m);
 		}
-		newContext.append("\nFeedback: ").append(evaluationResponse.feedback());
+		newContext.append(\"%nFeedback: \").append(evaluationResponse.feedback());
 
 		return loop(task, newContext.toString(), memory, chainOfThought);
 	}
@@ -253,8 +254,8 @@ public class EvaluatorOptimizer {
 				.call()
 				.entity(Generation.class);
 
-		System.out.println(String.format("\n=== GENERATOR OUTPUT ===\nTHOUGHTS: %s\n\nRESPONSE:\n %s\n",
-				generationResponse.thoughts(), generationResponse.response()));
+		Logger logger = Logger.getLogger(EvaluatorOptimizer.class.getName());
+				logger.info(String.format(\"%n=== GENERATOR OUTPUT ===%nTHOUGHTS: %s%n%nRESPONSE:%n %s%n\", generationResponse.thoughts(), generationResponse.response()));
 		return generationResponse;
 	}
 
@@ -283,7 +284,7 @@ public class EvaluatorOptimizer {
 				.call()
 				.entity(EvaluationResponse.class);
 
-		System.out.println(String.format("\n=== EVALUATOR OUTPUT ===\nEVALUATION: %s\n\nFEEDBACK: %s\n",
+
 				evaluationResponse.evaluation(), evaluationResponse.feedback()));
 		return evaluationResponse;
 	}
