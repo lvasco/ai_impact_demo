@@ -16,6 +16,7 @@
 */
 package com.example.agentic;
 
+import java.util.logging.Logger;
 import java.util.List;
 import java.util.Map;
 
@@ -33,6 +34,7 @@ public class Application {
 
 	public static void main(String[] args) {
 		SpringApplication.run(Application.class, args);
+    private static final Logger LOGGER = Logger.getLogger(Application.class.getName());
 	}
 
 	@Bean
@@ -117,11 +119,11 @@ public class Application {
 
 			int i = 1;
 			for (String ticket : tickets) {
-				System.out.println("\nTicket " + i++);
-				System.out.println("------------------------------------------------------------");
-				System.out.println(ticket);
-				System.out.println("------------------------------------------------------------");
-				System.out.println(routerWorkflow.route(ticket, supportRoutes));
+                LOGGER.info("\nTicket " + i++);
+                LOGGER.info("------------------------------------------------------------");
+                LOGGER.info(ticket);
+                LOGGER.info("------------------------------------------------------------");
+                LOGGER.info(routerWorkflow.route(ticket, supportRoutes));
 			}
 
 		};
