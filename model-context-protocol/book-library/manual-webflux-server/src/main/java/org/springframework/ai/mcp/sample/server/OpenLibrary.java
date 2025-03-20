@@ -63,7 +63,6 @@ public class OpenLibrary {
 		return books.docs.stream().map(doc -> (String) doc.get("top_work")).toList();
 	}
 
-	public static void main(String[] args) {
 		OpenLibrary openLibrary = new OpenLibrary(RestClient.builder());
 		List<Book> books = openLibrary.getBooks("Spring Framework");
 		System.out.println(books);
