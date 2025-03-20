@@ -14,7 +14,9 @@
 * limitations under the License.
 */
 package com.example.agentic;
+import java.util.logging.Logger;
 
+import java.util.logging.Level;
 import java.util.List;
 
 import org.springframework.ai.chat.client.ChatClient;
@@ -65,6 +67,7 @@ import org.springframework.util.Assert;
  *      effective agents</a>
  */
 public class OrchestratorWorkers {
+private static final Logger LOGGER = Logger.getLogger(OrchestratorWorkers.class.getName());
 
 	private final ChatClient chatClient;
 	private final String orchestratorPrompt;
@@ -182,7 +185,7 @@ public class OrchestratorWorkers {
 				.call()
 				.entity(OrchestratorResponse.class);
 
-		System.out.println(String.format("\n=== ORCHESTRATOR OUTPUT ===\nANALYSIS: %s\n\nTASKS: %s\n",
+		LOGGER.info(String.format("%n=== ORCHESTRATOR OUTPUT ===%nANALYSIS: %s%n%nTASKS: %s%n", orchestratorResponse.analysis(), orchestratorResponse.tasks()));
 				orchestratorResponse.analysis(), orchestratorResponse.tasks()));
 
 		// Step 2: Process each task
@@ -194,7 +197,7 @@ public class OrchestratorWorkers {
 				.call()
 				.content()).toList();
 
-		System.out.println("\n=== WORKER OUTPUT ===\n" + workerResponses);
+		LOGGER.info("%n=== WORKER OUTPUT ===%n" + workerResponses);
 
 		return new FinalResponse(orchestratorResponse.analysis(), workerResponses);
 	}
