@@ -28,7 +28,7 @@ import io.modelcontextprotocol.client.transport.StdioClientTransport;
  */
 public class ClientStdio {
 
-	public static void main(String[] args) {
+	public static void main() {
 
 		var stdioParams = ServerParameters.builder("java")
 			.args("-Dspring.ai.mcp.server.stdio=true", "-Dspring.main.web-application-type=none",
