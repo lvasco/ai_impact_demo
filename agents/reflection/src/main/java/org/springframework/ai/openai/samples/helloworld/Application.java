@@ -1,5 +1,7 @@
 package org.springframework.ai.openai.samples.helloworld;
 
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import org.springframework.ai.chat.client.ChatClient;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
@@ -15,16 +17,17 @@ public class Application {
         SpringApplication.run(Application.class, args);
     }
 
+    private static final Logger LOGGER = Logger.getLogger(Application.class.getName());
     @Bean
     CommandLineRunner cli(ReflectionAgent reflectionAgent) {
         return args -> {
             var scanner = new Scanner(System.in);
-            System.out.println("\nLet's chat!");
+            LOGGER.log(Level.INFO, "\nLet's chat!");
 
             // Generate a Java implementation of the Merge Sort algorithm
             while (true) {
-                System.out.print("\nUSER: ");
-                System.out.println("AGENT: " +
+                LOGGER.log(Level.INFO, "\nUSER: ");
+                LOGGER.log(Level.INFO, "AGENT: " + reflectionAgent.run(scanner.nextLine(), 2));
                         reflectionAgent.run(scanner.nextLine(), 2));
             }
         };
