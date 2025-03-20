@@ -1,5 +1,6 @@
 package org.springframework.ai.openai.samples.helloworld;
 
+import java.util.logging.Logger;
 import org.springframework.ai.chat.client.ChatClient;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
@@ -15,15 +16,16 @@ public class Application {
         SpringApplication.run(Application.class, args);
     }
 
+    private static final Logger LOGGER = Logger.getLogger(Application.class.getName());
     @Bean
     CommandLineRunner cli(ChatClient.Builder builder) {
         return args -> {
             var chat = builder.build();
             var scanner = new Scanner(System.in);
-            System.out.println("\nLet's chat!");
+            LOGGER.info("\nLet's chat!");
             while (true) {
-                System.out.print("\nUSER: ");
-                System.out.println("ASSISTANT: " +
+                LOGGER.info("\nUSER: ");
+                LOGGER.info("ASSISTANT: " + chat.prompt(scanner.nextLine()).call().content());
                         chat.prompt(scanner.nextLine()).call().content());
             }
         };
