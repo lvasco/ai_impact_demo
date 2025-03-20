@@ -19,6 +19,8 @@ import org.springframework.ai.chat.client.ChatClient;
 import org.springframework.ai.tool.ToolCallbackProvider;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.CommandLineRunner;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.ConfigurableApplicationContext;
@@ -26,6 +28,7 @@ import org.springframework.context.annotation.Bean;
 
 @SpringBootApplication
 public class Application {
+    private static final Logger LOGGER = Logger.getLogger(Application.class.getName());
 
 	public static void main(String[] args) {
 		SpringApplication.run(Application.class, args);
@@ -44,8 +47,8 @@ public class Application {
 					.defaultTools(tools)
 					.build();
 
-			System.out.println("\n>>> QUESTION: " + userInput);
-			System.out.println("\n>>> ASSISTANT: " + chatClient.prompt(userInput).call().content());
+            LOGGER.log(Level.INFO, "\n>>> QUESTION: " + userInput);
+            LOGGER.log(Level.INFO, "\n>>> ASSISTANT: " + chatClient.prompt(userInput).call().content());
 
 			context.close();
 		};
